@@ -1,18 +1,8 @@
-playdoh
+DLL Directory
 =======
 
-Mozilla's Playdoh is a web application template based on [Django][django].
-
-Patches are welcome! Feel free to fork and contribute to this project on
-[github][gh-playdoh].
-
-Full [documentation][docs] is available as well.
-
-
-[django]: http://www.djangoproject.com/
-[gh-playdoh]: https://github.com/mozilla/playdoh
-[docs]: http://playdoh.rtfd.org/
-
+The DLL Directory exists as a library for helping engineers determine
+the validity and source of various Windows DLLs.
 
 License
 -------
