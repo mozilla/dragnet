@@ -2,15 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 
-class Comment(models.Model):
-    '''Comments users have made on given DLL files'''
-    user_id = models.ForeignKey(User)
-    dll_id = models.ForeignKey('File')
-    date = models.DateTimeField(auto_now_add=True)
-    comment = models.TextField()
-    
 class File(models.Model):
-    '''The actual DLL file itself'''
+    """The actual DLL file itself"""
     STATUS_UNKNOWN = 'unknown'
     STATUS_VALID = 'valid'
     STATUS_MALWARE = 'malware'
@@ -20,7 +13,8 @@ class File(models.Model):
         (STATUS_MALWARE, 'Malware')
     )
     date_created = models.DateTimeField(default=datetime.datetime.now)
-    date_modified = models.DateTimeField(default=datetime.datetime.now, auto_now=True)
+    date_modified = models.DateTimeField(default=datetime.datetime.now, 
+                                         auto_now=True)
     created_by = models.ForeignKey(Users)
     file_name = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200, blank=True, null=True)
@@ -34,10 +28,19 @@ class File(models.Model):
     replaced_by = models.CharField(max_length=200, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
     
+
+class Comment(models.Model):
+    """Comments users have made on given DLL files"""
+    user = models.ForeignKey(User)
+    dll = models.ForeignKey(File)
+    date = models.DateTimeField(auto_now_add=True)
+    comment = models.TextField()    
+
 class FileHistory(models.Model):
-    '''A historical record of the DLL file and the changes made to it over time'''
+    """A historical record of the DLL file and the changes made to it over 
+       time"""
     dllid = models.ForeignKey(File)
-    userid = models.ForeignKey(Users)
+    user = models.ForeignKey(Users)
     date_changed = models.DateTimeField(auto_now=True)
     field = models.CharField(max_length=40)
     original_state = models.CharField(max_length=200)
