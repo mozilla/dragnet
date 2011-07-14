@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 import datetime
 
@@ -15,7 +17,7 @@ class File(models.Model):
     date_created = models.DateTimeField(default=datetime.datetime.now)
     date_modified = models.DateTimeField(default=datetime.datetime.now, 
                                          auto_now=True)
-    created_by = models.ForeignKey(Users)
+    created_by = models.ForeignKey(User)
     file_name = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200, blank=True, null=True)
     vendor = models.CharField(max_length=200, blank=True, null=True)
@@ -40,8 +42,14 @@ class FileHistory(models.Model):
     """A historical record of the DLL file and the changes made to it over 
        time"""
     dllid = models.ForeignKey(File)
-    user = models.ForeignKey(Users)
+    user = models.ForeignKey(User)
     date_changed = models.DateTimeField(auto_now=True)
     field = models.CharField(max_length=40)
     original_state = models.CharField(max_length=200)
     changed_state = models.CharField(max_length=200)
+    
+@receiver(pre_save, sender=File)
+def compare_history(sender, instance):
+    existing = File.objects.get(pk=1) #need to make this the sender's PK
+    #compare the two
+    return sender
