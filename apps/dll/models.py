@@ -49,7 +49,7 @@ class FileHistory(models.Model):
     changed_state = models.CharField(max_length=200)
     
 @receiver(pre_save, sender=File)
-def compare_history(sender, instance):
+def compare_history(sender, **kwargs):
     existing = File.objects.get(pk=1) #need to make this the sender's PK
     #compare the two
     return sender
