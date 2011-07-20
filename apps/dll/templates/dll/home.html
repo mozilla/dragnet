@@ -1,0 +1,9 @@
+{% if dllid %}
+    <form method="post" action="{{ url('dll.edit', dllid)}}">
+{% else %}
+    <form method="post" action="{{ url('dll.home')}}">
+{% endif %}
+	{{ csrf() }}
+<table>
+{{ form }}
+</table><input type="submit" value="Submit" />

@@ -48,8 +48,8 @@ class FileHistory(models.Model):
     user = models.ForeignKey(User)
     date_changed = models.DateTimeField(auto_now=True)
     field = models.CharField(max_length=40)
-    original_state = models.CharField(max_length=200)
-    changed_state = models.CharField(max_length=200)
+    original_state = models.CharField(max_length=200, blank=True, null=True)
+    changed_state = models.CharField(max_length=200, blank=True, null=True)
 
 
 @receiver(pre_save, sender=File)
