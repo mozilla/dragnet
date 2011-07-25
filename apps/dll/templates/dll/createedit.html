@@ -1,7 +1,7 @@
 {% if dllname %}
     <form method="post" action="{{ url('dll.edit', dllname)}}">
 {% else %}
-    <form method="post" action="{{ url('dll.home')}}">
+    <form method="post" action="{{ url('dll.create')}}">
 {% endif %}
 	{{ csrf() }}
 <table>
