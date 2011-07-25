@@ -1,0 +1,29 @@
+<form action="{{ url('dll.search')}}" method="post">
+    {{ csrf() }}
+	
+    {{ search }}
+    <input type="submit" name="submit" value="Submit" />
+    <a href="{{ url('dll.create') }}">Create New</a>
+</form>
+
+<table>
+    <tr>
+        <th>File Name</th>
+        <th>Common Name</th>
+        <th>Vendor</th>
+        <th>Date Created</th>
+        <th>Date Modified</th>
+    </tr>
+
+{% for file in dlls %}
+
+<tr>
+    <td><a href="{{ url('dll.edit', file.file_name) }}">{{file.file_name}}</a></td>
+    <td>{{ file.common_name }}</td>
+    <td>{{ file.vendor }}</td>
+    <td>{{ file.date_created }}</td>
+    <td>{{ file.date_modified }}</td>
+</tr>
+{% endfor %}
+
+</table>

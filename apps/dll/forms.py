@@ -16,3 +16,6 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         exclude = ('user', 'dll', 'date', )
+
+class SearchForm(forms.Form):
+    search = forms.CharField()

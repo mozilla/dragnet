@@ -1,5 +1,5 @@
-{% if dllid %}
-    <form method="post" action="{{ url('dll.edit', dllid)}}">
+{% if dllname %}
+    <form method="post" action="{{ url('dll.edit', dllname)}}">
 {% else %}
     <form method="post" action="{{ url('dll.home')}}">
 {% endif %}
@@ -7,3 +7,4 @@
 <table>
 {{ form }}
 </table><input type="submit" value="Submit" />
+</form>
