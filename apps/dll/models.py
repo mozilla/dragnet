@@ -31,7 +31,7 @@ class File(models.Model):
     obsolete = models.BooleanField(default=False)
     replaced_by = models.CharField(max_length=200, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
-    
+
     def search(self, query):
         q = "SELECT * FROM dll_file WHERE file_name LIKE '%%%s%%'" % query
         return File.objects.raw(q)

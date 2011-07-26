@@ -10,13 +10,15 @@ import jingo
 from dll.forms import *
 from dll.models import *
 
+
 def home(request):
     dlls = File.objects.all().order_by('-date_modified')[:10]
     count = File.objects.count()
     search = SearchForm()
-    data = {'dlls' : dlls, 'count' : count, 'search': search}
+    data = {'dlls': dlls, 'count': count, 'search': search}
     return jingo.render(request, 'dll/index.html', data)
-    
+
+
 def search(request):
     search = SearchForm(request.POST)
     if search.is_valid():
@@ -24,9 +26,11 @@ def search(request):
     else:
         http.HttpResponseRedirect('/')
     results = File.objects.filter(file_name__contains=term)
-    data = {'count': len(results), 'dlls': results, 'term' : term, 'search': search}
+    data = {'count': len(results), 'dlls': results, 'term': term,
+            'search': search}
     return jingo.render(request, 'dll/search.html', data)
-    
+
+
 def create(request):
     """Main view."""
     if request.method == 'POST':
@@ -35,8 +39,9 @@ def create(request):
             form.save()
     else:
         form = FileForm()
-    data = {'form':form}
+    data = {'form': form}
     return jingo.render(request, 'dll/createedit.html', data)
+
 
 def edit(request, dllname):
     thefile = get_object_or_404(File, file_name__exact=dllname)
@@ -45,6 +50,6 @@ def edit(request, dllname):
         if form.is_valid():
             form.save()
     else:
-        form = FileForm(instance = thefile)
-    data = {'dllname': dllname, 'form':form}
+        form = FileForm(instance=thefile)
+    data = {'dllname': dllname, 'form': form}
     return jingo.render(request, 'dll/createedit.html', data)
