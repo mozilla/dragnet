@@ -1,9 +1,10 @@
 from django.conf.urls.defaults import *
+import views
 
 
 urlpatterns = patterns('dll.views',
-    url(r'^$', 'home', name='dll.home'),
-    url(r'^file/?$', 'create', name='dll.create'),
-    url(r'^file/([a-zA-Z0-9\.]+)/?$', 'edit', name='dll.edit'),
-    url(r'^search/?$', 'search', name='dll.search'),
+    url(r'^$', views.home, name='dll.home'),
+    url(r'^file/?$', views.create, name='dll.create'),
+    url(r'^file/([a-zA-Z0-9\.]+)/?$', views.edit, name='dll.edit'),
+    url(r'^search/?$', views.search, name='dll.search'),
 )

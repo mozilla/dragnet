@@ -1,31 +1,29 @@
-"""Example views. Feel free to delete this app."""
-
 from django import http
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
+from django.views.decorators.csrf import csrf_exempt
 import bleach
 import jingo
 
-from dll.forms import *
-from dll.models import *
+from dll.forms import FileForm, CommentForm, SearchForm
+from dll.models import File, Comment, FileHistory
 
 
 def home(request):
     dlls = File.objects.all().order_by('-date_modified')[:10]
-    count = File.objects.count()
     search = SearchForm()
-    data = {'dlls': dlls, 'count': count, 'search': search}
+    data = {'dlls': dlls, 'search': search}
     return jingo.render(request, 'dll/index.html', data)
 
-
+@csrf_exempt
 def search(request):
-    search = SearchForm(request.POST)
+    search = SearchForm(data=request.GET)
     if search.is_valid():
-        term = search.cleaned_data['search']
+        term = search.cleaned_data['term']
+        results = File.objects.filter(file_name__contains=term)
     else:
-        http.HttpResponseRedirect('/')
-    results = File.objects.filter(file_name__contains=term)
+        term = ''
+        results = []
     data = {'count': len(results), 'dlls': results, 'term': term,
             'search': search}
     return jingo.render(request, 'dll/search.html', data)

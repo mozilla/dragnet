@@ -1,10 +1,15 @@
-{% if dllname %}
-    <form method="post" action="{{ url('dll.edit', dllname)}}">
-{% else %}
-    <form method="post" action="{{ url('dll.create')}}">
-{% endif %}
-	{{ csrf() }}
-<table>
-{{ form }}
-</table><input type="submit" value="Submit" />
-</form>
+{% extends 'dll/base.html' %}
+
+
+{% block mainbody %}
+    {% if dllname %}
+        <form method="post" action="{{ url('dll.edit', dllname)}}">
+    {% else %}
+        <form method="post" action="{{ url('dll.create')}}">
+    {% endif %}
+    	{{ csrf() }}
+    <table>
+    {{ form }}
+    </table><input type="submit" value="Submit" />
+    </form>
+{% endblock %}

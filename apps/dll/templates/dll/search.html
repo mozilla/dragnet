@@ -1,29 +1,31 @@
-<form action="{{ url('dll.search')}}" method="post">
-    {{ csrf() }}
+{% extends 'dll/base.html' %}
 
-    {{ search }}
-    <input type="submit" name="submit" value="Submit" />
-    <a href="{{ url('dll.create') }}">Create New</a>
-</form>
+{% block mainbody %}
+    <form action="{{ url('dll.search')}}" method="get">
+        {{ search }}
+        <input type="submit" value="Submit" />
+        <a href="{{ url('dll.create') }}">Create New</a>
+    </form>
 
-<table>
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>Common Name</th>
+            <th>Vendor</th>
+            <th>Date Created</th>
+            <th>Date Modified</th>
+        </tr>
+
+    {% for file in dlls %}
+
     <tr>
-        <th>File Name</th>
-        <th>Common Name</th>
-        <th>Vendor</th>
-        <th>Date Created</th>
-        <th>Date Modified</th>
+        <td><a href="{{ url('dll.edit', file.file_name) }}">{{file.file_name}}</a></td>
+        <td>{{ file.common_name }}</td>
+        <td>{{ file.vendor }}</td>
+        <td>{{ file.date_created }}</td>
+        <td>{{ file.date_modified }}</td>
     </tr>
+    {% endfor %}
 
-{% for file in dlls %}
-
-<tr>
-    <td><a href="{{ url('dll.edit', file.file_name) }}">{{file.file_name}}</a></td>
-    <td>{{ file.common_name }}</td>
-    <td>{{ file.vendor }}</td>
-    <td>{{ file.date_created }}</td>
-    <td>{{ file.date_modified }}</td>
-</tr>
-{% endfor %}
-
-</table>
+    </table>
+{%endblock%}

@@ -195,7 +195,9 @@ INSTALLED_APPS = (
     'jingo_minify',
     'tower',  # for ./manage.py extract (L10n)
 
+    # DLL Specific
     'dll',
+    'users',
 
     # We need this so the jsi18n view will pick up our locale directory.
     ROOT_PACKAGE,
@@ -210,7 +212,7 @@ INSTALLED_APPS = (
     'django_sha2',  # Load after auth to monkey-patch it.
 
     'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
+    'django.contrib.sessions',
     # 'django.contrib.sites',
     # 'django.contrib.messages',
     # Uncomment the next line to enable the admin:
@@ -268,3 +270,42 @@ BROKER_VHOST = 'playdoh'
 BROKER_CONNECTION_TIMEOUT = 0.1
 CELERY_RESULT_BACKEND = 'amqp'
 CELERY_IGNORE_RESULT = True
+
+AUTH_PROFILE_MODULE = 'users.UserProfile'
+LOGIN_URL = '/users/login/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+
+try:
+    ## LDAP
+    import ldap
+
+    AUTHENTICATION_BACKENDS = (
+       'users.email_auth_backend.EmailOrUsernameModelBackend',
+       'users.auth.backends.MozillaLDAPBackend',
+       'django.contrib.auth.backends.ModelBackend',
+    )
+
+    # these must be set in settings/local.py!
+    AUTH_LDAP_SERVER_URI = ''
+    AUTH_LDAP_BIND_DN = ''
+    AUTH_LDAP_BIND_PASSWORD = ''
+
+    AUTH_LDAP_START_TLS = True
+    AUTH_LDAP_USER_ATTR_MAP = {
+      "first_name": "givenName",
+      "last_name": "sn",
+      "email": "mail",
+    }
+    from django_auth_ldap.config import LDAPSearch
+    AUTH_LDAP_USER_SEARCH = LDAPSearch(
+      "dc=mozilla",
+      ldap.SCOPE_SUBTREE,
+      "mail=%(user)s"
+    )
+
+except ImportError:
+    AUTHENTICATION_BACKENDS = (
+       'users.email_auth_backend.EmailOrUsernameModelBackend',
+       'django.contrib.auth.backends.ModelBackend',
+    )

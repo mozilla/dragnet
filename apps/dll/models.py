@@ -25,23 +25,19 @@ class File(models.Model):
     vendor = models.CharField(max_length=200, blank=True, null=True)
     distributors = models.CharField(max_length=200, blank=True, null=True)
     md5_hash = models.CharField(max_length=32, blank=True, null=True)
-    sha1_hash = models.CharField(max_length=40, blank=True, null=True)
+    debug = models.CharField(max_length=60, blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     released = models.DateField(blank=True, null=True)
     obsolete = models.BooleanField(default=False)
     replaced_by = models.CharField(max_length=200, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
 
-    def search(self, query):
-        q = "SELECT * FROM dll_file WHERE file_name LIKE '%%%s%%'" % query
-        return File.objects.raw(q)
-
 
 class Comment(models.Model):
     """Comments users have made on given DLL files"""
     user = models.ForeignKey(User)
     dll = models.ForeignKey(File)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=datetime.datetime.now, auto_now=True)
     comment = models.TextField()
 
 
@@ -60,9 +56,9 @@ class FileHistory(models.Model):
 def compare_history(sender, instance, **kwargs):
     if not File.objects.filter(pk=instance.pk).exists():
         return sender
-    EVALUATE = ['file_name', 'common_name', 'vendor', 'distributors',
+    EVALUATE = ('file_name', 'common_name', 'vendor', 'distributors',
                 'md5_hash', 'sha1_hash', 'status', 'released', 'obsolete',
-                'replaced_by', 'details', ]
+                'replaced_by', 'details', )
 
     existing = File.objects.get(pk=instance.id)
     for key in EVALUATE:
