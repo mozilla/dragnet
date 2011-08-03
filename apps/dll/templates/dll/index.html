@@ -1,31 +1,31 @@
 {% extends 'dll/base.html' %}
 
 {% block mainbody %}
-    <form action="{{ url('dll.search')}}" method="get">
-        {{ search }}
-        <input type="submit" value="Submit" />
-        <a href="{{ url('dll.create') }}">Create New</a>
-    </form>
+    <div class="panel">
+        {% include 'dll/pagination.html' %}
+        <table>
+            <tr>
+                <th>Date Created</th>
+                <th>File Name</th>
+                <th>Common Name</th>
+                <th>Vendor</th>
+                <th>Status</th>
+                <th>Description</th>
+            </tr>
 
-    <table>
+        {% for file in dlls.object_list %}
+
         <tr>
-            <th>File Name</th>
-            <th>Common Name</th>
-            <th>Vendor</th>
-            <th>Date Created</th>
-            <th>Date Modified</th>
+            <td><a href="{{ url('dll.edit', file.file_name) }}">{{ dll_date_format(file.date_created) }}</a></td>
+            <td>{{file.file_name}}</td>
+            <td>{{ file.common_name }}</td>
+            <td>{{ file.vendor }}</td>
+            <td>{{ file.status }}</td>
+            <td>{{ file.description }}</td>
         </tr>
-
-    {% for file in dlls %}
-
-    <tr>
-        <td><a href="{{ url('dll.edit', file.file_name) }}">{{file.file_name}}</a></td>
-        <td>{{ file.common_name }}</td>
-        <td>{{ file.vendor }}</td>
-        <td>{{ file.date_created }}</td>
-        <td>{{ file.date_modified }}</td>
-    </tr>
-    {% endfor %}
-
-    </table>
+        {% endfor %}
+        </table>
+        {% include 'dll/pagination.html' %}
+    </div>
+    
 {%endblock%}

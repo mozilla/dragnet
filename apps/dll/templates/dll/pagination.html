@@ -1,0 +1,21 @@
+<div class="pagination">
+        
+    <span class="step-links">
+        <a href="{{ url('dll.home', 1) }}">First</a>
+        
+        {% if dlls.has_previous() %}
+            <a href="{{ url('dll.home', dlls.previous_page_number()) }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ dlls.number }} of {{ dlls.paginator.num_pages }}.
+        </span>
+
+        {% if dlls.has_next() %}
+            <a href="{{ url('dll.home', dlls.next_page_number()) }}">Next</a>
+        {% endif %}
+        
+        <a href="{{ url('dll.home', last_page) }}">Last</a>
+        
+    </span>
+</div>

@@ -1,8 +1,28 @@
 <html>
     <head>
         <title>{% block title %}DLL Directory{% endblock %}</title>
+        {% block site_css %}
+            {{ css('common_css') }}
+        {% endblock %}
+        
+        {% block site_js %}
+            {{ js('common_js') }}
+        {% endblock %}
+        
+        {% block extrahead %}{% endblock %}
+        
     </head>
     <body>
+        <div class="page-header">
+            <p>Mozilla DLL Directory</p>
+            
+            <form action="{{ url('dll.search')}}" method="get">
+                {% set search = BasicSearchForm(request) %}
+                <input type="text" name="term" value="{{ search.term }}" />
+            </form>
+        </div>
+        <div id="mainbody">
         {% block mainbody %}{% endblock %}
+        </div>
     </body>
 </html>

@@ -7,12 +7,24 @@ import jingo
 
 from dll.forms import FileForm, CommentForm, SearchForm
 from dll.models import File, Comment, FileHistory
+from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
+PAGE_LENGTH = 50
 
-def home(request):
-    dlls = File.objects.all().order_by('-date_modified')[:10]
-    search = SearchForm()
-    data = {'dlls': dlls, 'search': search}
+def home(request, page_no):
+    dll_list = File.objects.all().order_by('-date_created')
+    paginator = Paginator(dll_list, PAGE_LENGTH)
+    try:
+        page = int(page_no)
+    except (ValueError, TypeError):
+        page = 1
+
+    try:
+        dlls = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        dlls = paginator.page(paginator.num_pages)
+        
+    data = {'dlls': dlls, 'last_page': paginator.num_pages,}
     return jingo.render(request, 'dll/index.html', data)
 
 @csrf_exempt
@@ -24,8 +36,7 @@ def search(request):
     else:
         term = ''
         results = []
-    data = {'count': len(results), 'dlls': results, 'term': term,
-            'search': search}
+    data = {'count': len(results), 'dlls': results, 'term': term,}
     return jingo.render(request, 'dll/search.html', data)
 
 
