@@ -24,10 +24,23 @@ body {
     padding: 15px;   
 }
 
+.page-header a {
+    color: White;
+    text-decoration: none;
+}
+
 .page-header input {
     top: 20px;
     right: 20px;
     position: absolute;
+    border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	-moz-border-radius: 0.5em;
+	border: 1px solid #A0A0A0;
+	width: 240px;
+	background: url("/media/img/dll/search.png") no-repeat scroll 5px center #FFFFFF;
+	font-size: 12px;
+	padding: 3px 4px 4px 28px
 }
 
 #mainbody {
@@ -55,9 +68,26 @@ body {
     font-size: 10pt;
 }
 
-.panel th {
+.panel th, span.comment-meta {
     text-align: left;
     background-color: #85c162;
+}
+
+span.comment-meta {
+    font-weight: bold;
+
+}
+
+span.comment-meta, span.comment-data {
+    display: block;
+    padding: 3px;
+}
+
+.single-comment {
+    font-size: 11pt;
+    width: 600px;
+    border: 1px solid #D7D7D7;
+    margin: 10px;
 }
 
 .panel td, th {

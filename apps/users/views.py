@@ -47,7 +47,7 @@ import jingo
 import forms
 from models import get_user_profile
 from django.shortcuts import render_to_response as django_render_to_response
-
+from django.contrib.auth import logout as auth_logout
 
 def login(request):
     # mostly copied from zamboni
@@ -75,10 +75,7 @@ def login(request):
 
 
 def logout(request):
-    django.contrib.auth.views.render_to_response = django_render_to_response
-    django.contrib.auth.views.logout(request)
-    #if 'to' in request.GET:
-    #    request = _clean_next_url(request)
+    auth_logout(request)
     next = request.GET.get('next') or settings.LOGOUT_REDIRECT_URL
     response = http.HttpResponseRedirect(next)
     return response

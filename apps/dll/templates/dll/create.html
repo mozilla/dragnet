@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+
+{{ js('detail_js') }}
+
+{% endblock %}
+
+{% block mainbody %}
+    <div class="panel">
+        
+        <ul class="tab-list">
+            <li class="active"><a class="details" href="#">Details</a></li>
+        </ul>
+        <div id="details" class="information">
+                <form method="post" action="{{ url('dll.create')}}">            
+            	{{ csrf() }}
+            <table>
+            {{ form }}
+            <tr><th>&nbsp;</th><td><input type="submit" value="Submit" /></td>
+            </table>
+            </form>            
+        </div>
+    </div>
+{% endblock %}

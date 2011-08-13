@@ -5,9 +5,12 @@ from babel.dates import format_date, format_datetime
 
 @jingo.register.function
 def BasicSearchForm(request):
-    data = request.GET
+    if 'term' in request.GET:
+        data = {'term': request.GET['term']}
+    else:
+        data = {'term': 'Search'}
     form = forms.SearchForm(data)
-    return data
+    return form
     
 @jingo.register.function
 def dll_date_format(date):

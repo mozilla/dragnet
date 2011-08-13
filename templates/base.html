@@ -14,11 +14,11 @@
     </head>
     <body>
         <div class="page-header">
-            <p>Mozilla DLL Directory</p>
+            <p><a href="{{ url('dll.home') }}">Mozilla DLL Directory</a></p>
             
             <form action="{{ url('dll.search')}}" method="get">
                 {% set search = BasicSearchForm(request) %}
-                <input type="text" name="term" value="{{ search.term }}" />
+                {{ search.term }}
             </form>
         </div>
         <div id="mainbody">

@@ -20,7 +20,7 @@ class File(models.Model):
                                          auto_now=True)
     created_by = models.ForeignKey(User, related_name="created_by")
     modified_by = models.ForeignKey(User, related_name="modified_by")
-    file_name = models.CharField(max_length=200)
+    file_name = models.CharField(max_length=200, unique=True)
     common_name = models.CharField(max_length=200, blank=True, null=True)
     vendor = models.CharField(max_length=200, blank=True, null=True)
     distributors = models.CharField(max_length=200, blank=True, null=True)
@@ -31,6 +31,9 @@ class File(models.Model):
     obsolete = models.BooleanField(default=False)
     replaced_by = models.CharField(max_length=200, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
+    
+    def __unicode__(self):
+        return self.file_name
 
 
 class Comment(models.Model):
@@ -57,7 +60,7 @@ def compare_history(sender, instance, **kwargs):
     if not File.objects.filter(pk=instance.pk).exists():
         return sender
     EVALUATE = ('file_name', 'common_name', 'vendor', 'distributors',
-                'md5_hash', 'sha1_hash', 'status', 'released', 'obsolete',
+                'md5_hash', 'debug', 'status', 'released', 'obsolete',
                 'replaced_by', 'details', )
 
     existing = File.objects.get(pk=instance.id)

@@ -169,6 +169,7 @@ MINIFY_BUNDLES = {
     'js': {
         'common_js': (
             'js/libs/jquery-1.6.2.js',
+            'js/dll/nav.js',
         ),
         'detail_js': (
             'js/dll/detail.js',

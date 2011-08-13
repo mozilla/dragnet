@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+
+{{ js('detail_js') }}
+
+{% endblock %}
+
+{% block mainbody %}
+    <div class="panel">
+        
+        <ul class="tab-list">
+            <li class="active"><a class="details" href="#details">Details</a></li>
+            <li><a class="comments" href="#comments">Comments</a></li>
+            <li><a class="history" href="#history">History</a></li>
+        </ul>
+        <div id="details" class="information">
+    
+            <form method="post" action="{{ url('dll.edit', dllname)}}">
+            Created on {{ dll_datetime_format(form.instance.date_created) }} by {{ form.instance.created_by }}
+
+            <input type="hidden" name="update_file" value="true" >
+            
+            {{ csrf() }}
+            <table>
+            {{ form }}
+            <tr><th>&nbsp;</th><td><input type="submit" value="Submit" /></td>
+            </table>
+            </form>            
+        </div>
+        <div id="comments" class="information out-of-focus">
+            <form method="post" action="">
+                <input type="hidden" name="update_comment" value="true" />
+                {{ csrf() }}
+                <table>
+                    {{ commentForm }}
+                <tr>
+                    <th>&nbsp;</th>
+                    <td><input type="submit" name="submit" value="Submit" />
+                </tr>
+                </table>
+                
+                    
+                {% for comment in comments %}
+                    <div class="single-comment">
+                        <span class="comment-meta">{{ comment.user }} wrote at {{ comment.date }}:</span>
+                        <span class="comment-data">{{ comment.comment|nl2br }}</span>
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+        <div id="history" class="information out-of-focus">History goes here</div>
+        
+    </div>
+{% endblock %}

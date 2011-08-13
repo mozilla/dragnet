@@ -15,7 +15,7 @@
             <a href="{{ url('dll.home', dlls.next_page_number()) }}">Next</a>
         {% endif %}
         
-        <a href="{{ url('dll.home', last_page) }}">Last</a>
+        <a href="{{ url('dll.home', dlls.paginator.num_pages) }}">Last</a>
         
     </span>
 </div>

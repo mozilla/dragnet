@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX `filename_unqiue` ON dll_file (file_name);

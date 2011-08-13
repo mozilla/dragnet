@@ -1,5 +1,5 @@
 from django import http
-from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 
 from django.views.decorators.csrf import csrf_exempt
 import bleach
@@ -8,6 +8,8 @@ import jingo
 from dll.forms import FileForm, CommentForm, SearchForm
 from dll.models import File, Comment, FileHistory
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
+
+from django.db.models import Q
 
 PAGE_LENGTH = 50
 
@@ -32,7 +34,10 @@ def search(request):
     search = SearchForm(data=request.GET)
     if search.is_valid():
         term = search.cleaned_data['term']
-        results = File.objects.filter(file_name__contains=term)
+        results = File.objects.filter(Q(file_name__icontains=term) |
+                                   Q(common_name__icontains=term) |
+                                   Q(vendor__icontains=term) |
+                                   Q(distributors__icontains=term))
     else:
         term = ''
         results = []
@@ -46,19 +51,30 @@ def create(request):
         form = FileForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('dll.edit', form.cleaned_data['file_name'])
     else:
         form = FileForm()
     data = {'form': form}
-    return jingo.render(request, 'dll/createedit.html', data)
+    return jingo.render(request, 'dll/create.html', data)
 
 
 def edit(request, dllname):
     thefile = get_object_or_404(File, file_name__exact=dllname)
+    comments = Comment.objects.filter(dll__exact=thefile)
+    form = FileForm(instance=thefile)
+    commentForm = CommentForm()
     if request.method == 'POST':
-        form = FileForm(request.POST, instance=thefile)
-        if form.is_valid():
-            form.save()
-    else:
-        form = FileForm(instance=thefile)
-    data = {'dllname': dllname, 'form': form}
-    return jingo.render(request, 'dll/createedit.html', data)
+        if 'update_file' in request.POST:
+            form = FileForm(request.POST, instance=thefile)
+            if form.is_valid():
+                form.save()
+                return redirect('dll.edit', thefile.file_name)
+        elif 'update_comment' in request.POST:
+            commentForm = CommentForm(request.POST)
+            if commentForm.is_valid():
+                Comment.objects.create(user=commentForm.cleaned_data['user'],
+                                       dll=thefile,
+                                       comment=commentForm.cleaned_data['comment'])
+                return redirect('dll.edit', thefile.file_name)
+    data = {'dllname': dllname, 'form': form, 'commentForm': commentForm, 'comments': comments}
+    return jingo.render(request, 'dll/edit.html', data)

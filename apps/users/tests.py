@@ -42,6 +42,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import REDIRECT_FIELD_NAME
 from nose.tools import eq_, ok_
+from commons.urlresolvers import reverse
 
 try:
     import ldap
@@ -53,7 +54,9 @@ except ImportError:
 class UsersTest(TestCase):
 
     def test_login(self):
+        self.client.get('/')
         url = reverse('users.login')
+
         response = self.client.get(url)
         eq_(response.status_code, 200)
 
