@@ -104,8 +104,6 @@ def edit(request, dllname):
 def _organize_history(resultset):
     res = collections.defaultdict(list)
     for x in resultset:
-        ts = mktime(x.date_changed.timetuple())
-        ts = x.date_changed
-        res[ts].append(x)
+        res[x.date_changed].append(x)
     return res
         
