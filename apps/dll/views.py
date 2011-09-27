@@ -1,5 +1,6 @@
 from django import http
 from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from django.views.decorators.csrf import csrf_exempt
 import bleach
@@ -45,11 +46,21 @@ def search(request):
     return jingo.render(request, 'dll/search.html', data)
 
 
+def view(request, dllname):
+    thefile = get_object_or_404(File, file_name__exact=dllname)
+    comments = Comment.objects.filter(dll__exact=thefile)
+    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments}
+    return jingo.render(request, 'dll/view.html', data)
+    
+
+@login_required
 def create(request):
     """Main view."""
     if request.method == 'POST':
         form = FileForm(request.POST)
         if form.is_valid():
+            form.instance.created_by = request.user
+            form.instance.modified_by = request.user
             form.save()
             return redirect('dll.edit', form.cleaned_data['file_name'])
     else:
@@ -59,6 +70,8 @@ def create(request):
 
 
 def edit(request, dllname):
+    if not request.user.is_authenticated():
+        return redirect('dll.view', dllname)
     thefile = get_object_or_404(File, file_name__exact=dllname)
     comments = Comment.objects.filter(dll__exact=thefile)
     form = FileForm(instance=thefile)
@@ -67,6 +80,7 @@ def edit(request, dllname):
         if 'update_file' in request.POST:
             form = FileForm(request.POST, instance=thefile)
             if form.is_valid():
+                form.instance.modified_by = request.user
                 form.save()
                 return redirect('dll.edit', thefile.file_name)
         elif 'update_comment' in request.POST:

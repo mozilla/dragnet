@@ -17,12 +17,14 @@
         <div id="details" class="information">
     
             <form method="post" action="{{ url('dll.edit', dllname)}}">
-            Created on {{ dll_datetime_format(form.instance.date_created) }} by {{ form.instance.created_by }}
 
             <input type="hidden" name="update_file" value="true" >
             
             {{ csrf() }}
             <table>
+                <tr><th>Created</th><td>{{ dll_datetime_format(form.instance.date_created) }} by {{ form.instance.created_by }}</td></tr>
+                <tr><th>Modified</th><td>{{ dll_datetime_format(form.instance.date_modified) }} by {{ form.instance.modified_by }}</td></tr>
+                
             {{ form }}
             <tr><th>&nbsp;</th><td><input type="submit" value="Submit" /></td>
             </table>

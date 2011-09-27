@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block extrahead %}
+
+{{ js('detail_js') }}
+
+{% endblock %}
+
+{% block mainbody %}
+    <div class="panel">
+        
+        <ul class="tab-list">
+            <li class="active"><a class="details" href="#details">Details</a></li>
+            <li><a class="comments" href="#comments">Comments</a></li>
+            <li><a class="history" href="#history">History</a></li>
+        </ul>
+        <div id="details" class="information">
+            <table>
+                <tr><th>Created</th><td>{{ dll_datetime_format(dlldata.date_created) }} by {{ dlldata.created_by }}</td></tr>
+                <tr><th>Modified</th><td>{{ dll_datetime_format(dlldata.date_modified) }} by {{ dlldata.modified_by }}</td></tr>
+                <tr><th>File Name</th><td>{{ dlldata.file_name }}</td></tr>
+                <tr><th>Common Name</th><td>{{ dlldata.common_name }}</td></tr>
+                <tr><th>Vendor</th><td>{{ dlldata.vendor }}</td></tr>
+                <tr><th>Distributors</th><td>{{ dlldata.distributors }}</td></tr>
+                <tr><th>MD5 Hash</th><td>{{ dlldata.md5_hash }}</td></tr>
+                <tr><th>Debug</th><td>{{ dlldata.debug }}</td></tr>
+                <tr><th>Status</th><td>{{ dlldata.status }}</td></tr>
+                <tr><th>Released</th><td>{{ dlldata.released }}</td></tr>
+                <tr><th>Obsolete</th><td>{{ dlldata.obsolete }}</td></tr>
+                <tr><th>Replaced By</th><td>{{ dlldata.replaced_by }}</td></tr>
+                <tr><th>Details</th><td>{{ dlldata.details }}</td></tr>
+                
+                
+            </table>
+        </div>
+        <div id="comments" class="information out-of-focus">
+            {% for comment in comments %}
+                <div class="single-comment">
+                    <span class="comment-meta">{{ comment.user }} wrote at {{ comment.date }}:</span>
+                    <span class="comment-data">{{ comment.comment|nl2br }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <div id="history" class="information out-of-focus">History goes here</div>
+        
+    </div>
+{% endblock %}
