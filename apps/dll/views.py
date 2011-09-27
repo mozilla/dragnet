@@ -1,3 +1,6 @@
+import collections
+from time import mktime
+
 from django import http
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -49,7 +52,9 @@ def search(request):
 def view(request, dllname):
     thefile = get_object_or_404(File, file_name__exact=dllname)
     comments = Comment.objects.filter(dll__exact=thefile)
-    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments}
+    hist = FileHistory.objects.filter(dll__exact=thefile)
+    history = _organize_history(hist)
+    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments, 'history': history}
     return jingo.render(request, 'dll/view.html', data)
     
 
@@ -74,6 +79,8 @@ def edit(request, dllname):
         return redirect('dll.view', dllname)
     thefile = get_object_or_404(File, file_name__exact=dllname)
     comments = Comment.objects.filter(dll__exact=thefile)
+    hist = FileHistory.objects.filter(dll__exact=thefile)
+    history = _organize_history(hist)
     form = FileForm(instance=thefile)
     commentForm = CommentForm()
     if request.method == 'POST':
@@ -90,5 +97,15 @@ def edit(request, dllname):
                                        dll=thefile,
                                        comment=commentForm.cleaned_data['comment'])
                 return redirect('dll.edit', thefile.file_name)
-    data = {'dllname': dllname, 'form': form, 'commentForm': commentForm, 'comments': comments}
+    data = {'dllname': dllname, 'form': form, 'commentForm': commentForm, 'comments': comments, 'history': history}
     return jingo.render(request, 'dll/edit.html', data)
+
+
+def _organize_history(resultset):
+    res = collections.defaultdict(list)
+    for x in resultset:
+        ts = mktime(x.date_changed.timetuple())
+        ts = x.date_changed
+        res[ts].append(x)
+    return res
+        

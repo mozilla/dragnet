@@ -21,8 +21,15 @@
                 {{ search.term }}
             </form>
         </div>
-        <div id="mainbody">
+        <div id="mainbody" class="body">
         {% block mainbody %}{% endblock %}
+        </div>
+        <div class="panel body right">
+            {% if request.user.is_authenticated() %}
+                Welcome {{ request.user.first_name }}. <a href="{{ url('dll.create') }}">Create New DLL</a>&nbsp;&nbsp;<a href="{{ url('users.logout') }}">Log Out</a>
+            {% else %}
+                <a href="{{ url('users.login') }}">Log In</a>
+            {% endif %}
         </div>
     </body>
 </html>

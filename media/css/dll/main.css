@@ -43,11 +43,14 @@ body {
 	padding: 3px 4px 4px 28px
 }
 
-#mainbody {
+.body {
     margin: 1em 2em;
-    min-height: 50em;
     position: relative;
     text-align: left;
+}
+
+.right {
+    text-align: right;
 }
 
 .panel {
@@ -144,4 +147,8 @@ ul.tab-list a {
 
 .out-of-focus {
     display: none;
+}
+
+table.history td {
+    width: 25%;
 }
