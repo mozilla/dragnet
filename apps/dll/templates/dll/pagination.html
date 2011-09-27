@@ -1,21 +1,23 @@
-<div class="pagination">
+{% macro dll_paginator(page_url, dlls) %}
+    <div class="pagination">
         
-    <span class="step-links">
-        <a href="{{ url('dll.home', 1) }}">First</a>
+        <span class="step-links">
+            <a href="{{ url(page_url, 1) }}">First</a>
         
-        {% if dlls.has_previous() %}
-            <a href="{{ url('dll.home', dlls.previous_page_number()) }}">Previous</a>
-        {% endif %}
+            {% if dlls.has_previous() %}
+                <a href="{{ url(page_url, dlls.previous_page_number()) }}">Previous</a>
+            {% endif %}
 
-        <span class="current">
-            Page {{ dlls.number }} of {{ dlls.paginator.num_pages }}.
+            <span class="current">
+                Page {{ dlls.number }} of {{ dlls.paginator.num_pages }}.
+            </span>
+
+            {% if dlls.has_next() %}
+                <a href="{{ url(page_url, dlls.next_page_number()) }}">Next</a>
+            {% endif %}
+        
+            <a href="{{ url(page_url, dlls.paginator.num_pages) }}">Last</a>
+        
         </span>
-
-        {% if dlls.has_next() %}
-            <a href="{{ url('dll.home', dlls.next_page_number()) }}">Next</a>
-        {% endif %}
-        
-        <a href="{{ url('dll.home', dlls.paginator.num_pages) }}">Last</a>
-        
-    </span>
-</div>
+    </div>
+{% endmacro %}
