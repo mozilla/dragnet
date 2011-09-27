@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>{% block title %}DLL Directory{% endblock %}</title>
+        <title>{% block title %}Mozilla Dragnet{% endblock %}</title>
         {% block site_css %}
             {{ css('common_css') }}
         {% endblock %}
@@ -14,7 +14,7 @@
     </head>
     <body>
         <div class="page-header">
-            <p><a href="{{ url('dll.home') }}">Mozilla DLL Directory</a></p>
+            <p><a href="{{ url('dll.home') }}">Mozilla Dragnet</a></p>
             
             <form action="{{ url('dll.search')}}" method="get">
                 {% set search = BasicSearchForm(request) %}
