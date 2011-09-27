@@ -47,3 +47,6 @@ DEV = True
 #    '2011-01-01': 'cheesecake',
 #}
 
+AUTH_LDAP_SERVER_URI = 'ldap://pm-ns.mozilla.org'
+AUTH_LDAP_BIND_DN = ''
+AUTH_LDAP_BIND_PASSWORD = ''

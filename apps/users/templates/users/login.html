@@ -38,7 +38,7 @@
 
 {% extends "base.html" %}
 
-{% block content %}
+{% block mainbody %}
 <form action="{{ url('users.login') }}" method="post">{{ csrf() }}
 {% if next %}
 <div style="display:none"><input name="next" value="{{ next }}"></div>
