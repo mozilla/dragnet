@@ -65,7 +65,7 @@ def compare_history(sender, instance, **kwargs):
 
     existing = File.objects.get(pk=instance.id)
     for key in EVALUATE:
-        if getattr(existing, key) != getattr(instance, key):
+        if getattr(existing, key) != getattr(instance, key) and any([getattr(existing, key), getattr(instance, key)]):
             user = User.objects.get(pk=instance.modified_by_id)
             FileHistory.objects.create(user=user,
                                        dll=existing,
