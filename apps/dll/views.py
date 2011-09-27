@@ -86,7 +86,7 @@ def edit(request, dllname):
         elif 'update_comment' in request.POST:
             commentForm = CommentForm(request.POST)
             if commentForm.is_valid():
-                Comment.objects.create(user=commentForm.cleaned_data['user'],
+                Comment.objects.create(user=request.user,
                                        dll=thefile,
                                        comment=commentForm.cleaned_data['comment'])
                 return redirect('dll.edit', thefile.file_name)

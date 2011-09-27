@@ -12,7 +12,7 @@ class CommentForm(forms.ModelForm):
     """Comment form for DLL comments"""
     class Meta:
         model = Comment
-        exclude = ('date', 'dll')
+        exclude = ('user', 'date', 'dll')
 
 class SearchForm(forms.Form):
     term = forms.CharField()
