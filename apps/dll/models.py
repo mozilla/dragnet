@@ -31,7 +31,7 @@ class File(models.Model):
     obsolete = models.BooleanField(default=False)
     replaced_by = models.CharField(max_length=200, blank=True, null=True)
     details = models.TextField(blank=True, null=True)
-    
+
     def __unicode__(self):
         return self.file_name
 
@@ -40,7 +40,8 @@ class Comment(models.Model):
     """Comments users have made on given DLL files"""
     user = models.ForeignKey(User)
     dll = models.ForeignKey(File)
-    date = models.DateTimeField(default=datetime.datetime.utcnow, auto_now=True)
+    date = models.DateTimeField(default=datetime.datetime.utcnow,
+                                auto_now=True)
     comment = models.TextField()
 
 

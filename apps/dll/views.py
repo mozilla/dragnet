@@ -17,6 +17,7 @@ from django.db.models import Q
 
 PAGE_LENGTH = 50
 
+
 def home(request, page_no):
     dll_list = File.objects.all().order_by('-date_created')
     paginator = Paginator(dll_list, PAGE_LENGTH)
@@ -29,9 +30,10 @@ def home(request, page_no):
         dlls = paginator.page(page)
     except (EmptyPage, InvalidPage):
         dlls = paginator.page(paginator.num_pages)
-        
-    data = {'dlls': dlls, 'last_page': paginator.num_pages,}
+
+    data = {'dlls': dlls, 'last_page': paginator.num_pages, }
     return jingo.render(request, 'dll/index.html', data)
+
 
 @csrf_exempt
 def search(request):
@@ -45,7 +47,7 @@ def search(request):
     else:
         term = ''
         results = []
-    data = {'count': len(results), 'dlls': results, 'term': term,}
+    data = {'count': len(results), 'dlls': results, 'term': term, }
     return jingo.render(request, 'dll/search.html', data)
 
 
@@ -54,9 +56,10 @@ def view(request, dllname):
     comments = Comment.objects.order_by('date').filter(dll__exact=thefile)
     hist = FileHistory.objects.filter(dll__exact=thefile)
     history = _organize_history(hist)
-    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments, 'history': history}
+    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments,
+            'history': history}
     return jingo.render(request, 'dll/view.html', data)
-    
+
 
 @login_required
 def create(request):
@@ -97,7 +100,8 @@ def edit(request, dllname):
                                        dll=thefile,
                                        comment=comment_form.cleaned_data['comment'])
                 return redirect('dll.edit', thefile.file_name)
-    data = {'dllname': dllname, 'form': form, 'comment_form': comment_form, 'comments': comments, 'history': history}
+    data = {'dllname': dllname, 'form': form, 'comment_form': comment_form,
+            'comments': comments, 'history': history}
     return jingo.render(request, 'dll/edit.html', data)
 
 
@@ -106,4 +110,3 @@ def _organize_history(resultset):
     for x in resultset:
         res[x.date_changed].append(x)
     return res
-        
