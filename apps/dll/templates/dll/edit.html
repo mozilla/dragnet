@@ -26,7 +26,7 @@
                 <tr><th>Modified</th><td>{{ dll_datetime_format(form.instance.date_modified) }} by {{ form.instance.modified_by }}</td></tr>
                 
             {{ form }}
-            <tr><th>&nbsp;</th><td><input type="submit" value="Submit" /></td>
+            <tr><th>&nbsp;</th><td><input type="submit" value="Submit" /></td></tr>
             </table>
             </form>            
         </div>
@@ -35,7 +35,7 @@
                 <input type="hidden" name="update_comment" value="true" />
                 {{ csrf() }}
                 <table>
-                    {{ commentForm }}
+                    {{ comment_form }}
                 <tr>
                     <th>&nbsp;</th>
                     <td><input type="submit" name="submit" value="Submit" />
@@ -54,7 +54,6 @@
         <div id="history" class="information out-of-focus">
             <table>
             {% for x in history %}
-                {% set his = history[x] %}
                 <tr>
                     <th>{{ x }}</th>
                     <td>
@@ -65,7 +64,7 @@
                                 <th>Removed</th>
                                 <th>Added</th>
                             </tr>
-                            {% for y in his %}
+                            {% for y in history[x] %}
                                 <tr>
                                     <td>{{ y.user }}</td>
                                     <td>{{ y.field }}</td>
@@ -78,8 +77,6 @@
                 </tr>
             {% endfor %}
             </table>
-            
-            
         </div>
         
     </div>

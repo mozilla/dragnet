@@ -41,7 +41,32 @@
                 </div>
             {% endfor %}
         </div>
-        <div id="history" class="information out-of-focus">History goes here</div>
-        
+        <div id="history" class="information out-of-focus">
+            <table>
+            {% for x in history %}
+                <tr>
+                    <th>{{ x }}</th>
+                    <td>
+                        <table class="history">
+                            <tr>
+                                <th>Who</th>
+                                <th>What</th>
+                                <th>Removed</th>
+                                <th>Added</th>
+                            </tr>
+                            {% for y in history[x] %}
+                                <tr>
+                                    <td>{{ y.user }}</td>
+                                    <td>{{ y.field }}</td>
+                                    <td>{{ y.original_state }}</td>
+                                    <td>{{ y.changed_state }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>        
     </div>
 {% endblock %}

@@ -15,8 +15,8 @@ class File(models.Model):
         (STATUS_VALID,     'Valid'),
         (STATUS_MALWARE, 'Malware')
     )
-    date_created = models.DateTimeField(default=datetime.datetime.now)
-    date_modified = models.DateTimeField(default=datetime.datetime.now,
+    date_created = models.DateTimeField(default=datetime.datetime.utcnow)
+    date_modified = models.DateTimeField(default=datetime.datetime.utcnow,
                                          auto_now=True)
     created_by = models.ForeignKey(User, related_name="created_by")
     modified_by = models.ForeignKey(User, related_name="modified_by")
@@ -40,7 +40,7 @@ class Comment(models.Model):
     """Comments users have made on given DLL files"""
     user = models.ForeignKey(User)
     dll = models.ForeignKey(File)
-    date = models.DateTimeField(default=datetime.datetime.now, auto_now=True)
+    date = models.DateTimeField(default=datetime.datetime.utcnow, auto_now=True)
     comment = models.TextField()
 
 

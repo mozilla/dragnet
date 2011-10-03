@@ -51,7 +51,7 @@ def search(request):
 
 def view(request, dllname):
     thefile = get_object_or_404(File, file_name__exact=dllname)
-    comments = Comment.objects.filter(dll__exact=thefile)
+    comments = Comment.objects.order_by('date').filter(dll__exact=thefile)
     hist = FileHistory.objects.filter(dll__exact=thefile)
     history = _organize_history(hist)
     data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments, 'history': history}
@@ -78,11 +78,11 @@ def edit(request, dllname):
     if not request.user.is_authenticated():
         return redirect('dll.view', dllname)
     thefile = get_object_or_404(File, file_name__exact=dllname)
-    comments = Comment.objects.filter(dll__exact=thefile)
+    comments = Comment.objects.order_by('date').filter(dll__exact=thefile)
     hist = FileHistory.objects.filter(dll__exact=thefile)
     history = _organize_history(hist)
     form = FileForm(instance=thefile)
-    commentForm = CommentForm()
+    comment_form = CommentForm()
     if request.method == 'POST':
         if 'update_file' in request.POST:
             form = FileForm(request.POST, instance=thefile)
@@ -91,13 +91,13 @@ def edit(request, dllname):
                 form.save()
                 return redirect('dll.edit', thefile.file_name)
         elif 'update_comment' in request.POST:
-            commentForm = CommentForm(request.POST)
-            if commentForm.is_valid():
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
                 Comment.objects.create(user=request.user,
                                        dll=thefile,
-                                       comment=commentForm.cleaned_data['comment'])
+                                       comment=comment_form.cleaned_data['comment'])
                 return redirect('dll.edit', thefile.file_name)
-    data = {'dllname': dllname, 'form': form, 'commentForm': commentForm, 'comments': comments, 'history': history}
+    data = {'dllname': dllname, 'form': form, 'comment_form': comment_form, 'comments': comments, 'history': history}
     return jingo.render(request, 'dll/edit.html', data)
 
 
