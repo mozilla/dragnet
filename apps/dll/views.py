@@ -51,12 +51,12 @@ def search(request):
     return jingo.render(request, 'dll/search.html', data)
 
 
-def view(request, dllname):
-    thefile = get_object_or_404(File, file_name__exact=dllname)
+def view(request, pk):
+    thefile = get_object_or_404(File, pk=pk)
     comments = Comment.objects.order_by('date').filter(dll__exact=thefile)
     hist = FileHistory.objects.filter(dll__exact=thefile)
     history = _organize_history(hist)
-    data = {'dllname': dllname, 'dlldata': thefile, 'comments': comments,
+    data = {'dllname': pk, 'dlldata': thefile, 'comments': comments,
             'history': history}
     return jingo.render(request, 'dll/view.html', data)
 
@@ -70,17 +70,17 @@ def create(request):
             form.instance.created_by = request.user
             form.instance.modified_by = request.user
             form.save()
-            return redirect('dll.edit', form.cleaned_data['file_name'])
+            return redirect('dll.edit', form.instance.pk)
     else:
         form = FileForm()
     data = {'form': form}
     return jingo.render(request, 'dll/create.html', data)
 
 
-def edit(request, dllname):
+def edit(request, pk):
     if not request.user.is_authenticated():
-        return redirect('dll.view', dllname)
-    thefile = get_object_or_404(File, file_name__exact=dllname)
+        return redirect('dll.view', pk)
+    thefile = get_object_or_404(File, pk=pk)
     comments = Comment.objects.order_by('date').filter(dll__exact=thefile)
     hist = FileHistory.objects.filter(dll__exact=thefile)
     history = _organize_history(hist)
@@ -92,15 +92,15 @@ def edit(request, dllname):
             if form.is_valid():
                 form.instance.modified_by = request.user
                 form.save()
-                return redirect('dll.edit', thefile.file_name)
+                return redirect('dll.edit', form.instance.pk)
         elif 'update_comment' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
                 Comment.objects.create(user=request.user,
                                        dll=thefile,
                                        comment=comment_form.cleaned_data['comment'])
-                return redirect('dll.edit', thefile.file_name)
-    data = {'dllname': dllname, 'form': form, 'comment_form': comment_form,
+                return redirect('dll.edit', thefile.pk)
+    data = {'dllname': pk, 'form': form, 'comment_form': comment_form,
             'comments': comments, 'history': history}
     return jingo.render(request, 'dll/edit.html', data)
 

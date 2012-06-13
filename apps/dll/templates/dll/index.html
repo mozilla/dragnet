@@ -17,7 +17,7 @@
         {% for file in dlls.object_list %}
 
         <tr>
-            <td><a href="{{ url('dll.edit', file.file_name) }}">{{ dll_date_format(file.date_created) }}</a></td>
+            <td><a href="{{ url('dll.edit', file.pk) }}">{{ dll_date_format(file.date_created) }}</a></td>
             <td>{{file.file_name}}</td>
             <td>{{ file.common_name }}</td>
             <td>{{ file.vendor }}</td>
