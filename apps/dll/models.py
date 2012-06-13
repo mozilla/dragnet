@@ -20,7 +20,7 @@ class File(models.Model):
                                          auto_now=True)
     created_by = models.ForeignKey(User, related_name="created_by")
     modified_by = models.ForeignKey(User, related_name="modified_by")
-    file_name = models.CharField(max_length=200, unique=True)
+    file_name = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200, blank=True, null=True)
     vendor = models.CharField(max_length=200, blank=True, null=True)
     distributors = models.CharField(max_length=200, blank=True, null=True)
@@ -34,6 +34,9 @@ class File(models.Model):
 
     def __unicode__(self):
         return self.file_name
+    
+    class Meta:
+        unique_together = ('file_name', 'md5_hash', 'debug')
 
 
 class Comment(models.Model):
