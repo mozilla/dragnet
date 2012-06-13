@@ -1,0 +1,1 @@
+ALTER TABLE dll_file ADD COLUMN `version` varchar(100) NULL;

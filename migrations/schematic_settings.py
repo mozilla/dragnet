@@ -2,8 +2,9 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.environ.setdefault('DJANGO_SETTNGO_SETTINGS_MODULE', 'dlldir.settings')
 
-# Set up playdoh.
+
 import manage
 from django.conf import settings
 

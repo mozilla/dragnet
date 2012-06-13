@@ -22,6 +22,7 @@ class File(models.Model):
     modified_by = models.ForeignKey(User, related_name="modified_by")
     file_name = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200, blank=True, null=True)
+    version = models.CharField(max_length=100, blank=True, null=True)
     vendor = models.CharField(max_length=200, blank=True, null=True)
     distributors = models.CharField(max_length=200, blank=True, null=True)
     md5_hash = models.CharField(max_length=32, blank=True, null=True)
