@@ -27,6 +27,7 @@ class File(models.Model):
     distributors = models.CharField(max_length=200, blank=True, null=True)
     md5_hash = models.CharField(max_length=32, blank=True, null=True)
     debug = models.CharField(max_length=60, blank=True, null=True)
+    debug_filename = models.CharField(max_length=60, blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES)
     released = models.DateField(blank=True, null=True)
     obsolete = models.BooleanField(default=False)
