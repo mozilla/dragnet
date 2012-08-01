@@ -1,0 +1,1 @@
+ALTER TABLE dll_file ADD COLUMN `platform` varchar(10) NOT NULL AFTER version;
