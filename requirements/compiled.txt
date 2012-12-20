@@ -6,3 +6,5 @@ python-ldap==2.3.13
 hmac==20101005
 hashlib==20081119
 py-bcrypt==0.2
+
+-r ../vendor/src/funfactory/funfactory/requirements/compiled.txt

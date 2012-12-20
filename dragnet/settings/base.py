@@ -2,27 +2,14 @@
 
 from funfactory.settings_base import *
 
-MINIFY_BUNDLES = {
-    'css': {
-        'common_css': (
-            'css/dll/main.css',
-        ),
-    },
-    'js': {
-        'common_js': (
-            'js/libs/jquery-1.6.2.js',
-            'js/dll/nav.js',
-        ),
-        'detail_js': (
-            'js/dll/detail.js',
-        ),
-    }
-}
+from django_sha2 import get_password_hashers
+PASSWORD_HASHERS = get_password_hashers(BASE_PASSWORD_HASHERS, HMAC_KEYS)
 
-INSTALLED_APPS += (
-    'dll',
-    'users',
-)
+INSTALLED_APPS = get_apps(append=(
+    'dragnet.users',
+    'dragnet.dll',
+    
+))
 
 # Because Jinja2 is the default template loader, add any non-Jinja templated
 # apps here:
@@ -59,8 +46,8 @@ try:
     import ldap
 
     AUTHENTICATION_BACKENDS = (
-       'users.email_auth_backend.EmailOrUsernameModelBackend',
-       'users.auth.backends.MozillaLDAPBackend',
+       'dragnet.users.email_auth_backend.EmailOrUsernameModelBackend',
+       'dragnet.users.auth.backends.MozillaLDAPBackend',
        'django.contrib.auth.backends.ModelBackend',
     )
 
@@ -84,6 +71,8 @@ try:
 
 except ImportError:
     AUTHENTICATION_BACKENDS = (
-       'users.email_auth_backend.EmailOrUsernameModelBackend',
+       'dragnet.users.email_auth_backend.EmailOrUsernameModelBackend',
        'django.contrib.auth.backends.ModelBackend',
     )
+
+ROOT_URLCONF = 'dragnet.urls'

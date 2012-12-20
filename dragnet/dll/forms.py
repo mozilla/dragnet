@@ -1,5 +1,5 @@
 from django import forms
-from dll.models import File, Comment
+from dragnet.dll.models import File, Comment
 
 
 class FileForm(forms.ModelForm):
