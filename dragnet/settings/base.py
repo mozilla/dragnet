@@ -8,7 +8,7 @@ PASSWORD_HASHERS = get_password_hashers(BASE_PASSWORD_HASHERS, HMAC_KEYS)
 INSTALLED_APPS = get_apps(append=(
     'dragnet.users',
     'dragnet.dll',
-    
+
 ))
 
 # Because Jinja2 is the default template loader, add any non-Jinja templated

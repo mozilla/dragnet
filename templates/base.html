@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
     <head>
         <title>{% block title %}Mozilla Dragnet{% endblock %}</title>
@@ -8,23 +9,23 @@
 
         {% block site_css %}
         {% endblock %}
-        
+
 
         {% compress js %}
             <script src="{{ static('js/libs/jquery-1.9.0.js') }}"></script>
             <script src="{{ static('js/dll/nav.js') }}"></script>
         {% endcompress %}
-        
+
         {% block site_js %}
         {% endblock %}
-        
+
         {% block extrahead %}{% endblock %}
-        
+
     </head>
     <body>
         <div class="page-header">
             <p><a href="{{ url('dll.home') }}">Mozilla Dragnet</a></p>
-            
+
             <form action="{{ url('dll.search')}}" method="get">
                 {% set search = BasicSearchForm(request) %}
                 {{ search.term }}
