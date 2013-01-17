@@ -2,7 +2,9 @@
 
 {% block extrahead %}
 
-{{ js('detail_js') }}
+{% compress js %}
+    <script src="{{ static('js/dll/detail.js') }}"></script>
+{% endcompress %}
 
 {% endblock %}
 

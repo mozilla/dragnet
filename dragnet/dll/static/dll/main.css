@@ -38,7 +38,7 @@ body {
 	-moz-border-radius: 0.5em;
 	border: 1px solid #A0A0A0;
 	width: 240px;
-	background: url("/media/img/dll/search.png") no-repeat scroll 5px center #FFFFFF;
+	background: url("/static/img/dll/search.png") no-repeat scroll 5px center #FFFFFF;
 	font-size: 12px;
 	padding: 3px 4px 4px 28px
 }

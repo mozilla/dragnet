@@ -12,8 +12,8 @@ patch()
 
 urlpatterns = patterns('',
     # Example:
-    (r'', include('dll.urls')),
-    (r'^users/', include('users.urls')),
+    (r'', include('dragnet.dll.urls')),
+    (r'^users/', include('dragnet.users.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -30,3 +30,7 @@ if settings.DEBUG:
         (r'^%s/(?P<path>.*)$' % media_url, 'django.views.static.serve',
          {'document_root': settings.MEDIA_ROOT}),
     )
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+if settings.DEBUG:
+    urlpatterns += staticfiles_urlpatterns()

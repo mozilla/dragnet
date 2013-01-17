@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 import bleach
 import jingo
 
-from dll.forms import FileForm, CommentForm, SearchForm
-from dll.models import File, Comment, FileHistory
+from dragnet.dll.forms import FileForm, CommentForm, SearchForm
+from dragnet.dll.models import File, Comment, FileHistory
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 
 from django.db.models import Q
