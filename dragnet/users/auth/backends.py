@@ -33,9 +33,11 @@
 # 
 # ***** END LICENSE BLOCK *****
 
+import logging
 from django.contrib.auth.models import User
 from django_auth_ldap.backend import LDAPBackend
 
+logger = logging.getLogger("authentication")
 
 class MozillaLDAPBackend(LDAPBackend):
     """Overriding this class so that I can transform emails to usernames.
@@ -73,11 +75,14 @@ class MozillaLDAPBackend(LDAPBackend):
         """
         # users on this site can't change their email but they can change their
         # username
+        
+        logger.info("Attempting LDAP auth of %s", username)
+        
         if ldap_user.attrs.get('mail'):
             for user in (User.objects
               .filter(email__iexact=ldap_user.attrs.get('mail')[0])):
                 return (user, False)
-
+                
         # use the default from django-auth-ldap
         return User.objects.get_or_create(
            username__iexact=username,
