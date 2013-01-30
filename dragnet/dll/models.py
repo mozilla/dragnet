@@ -15,7 +15,7 @@ class File(models.Model):
         (STATUS_VALID,     'Valid'),
         (STATUS_MALWARE, 'Malware')
     )
-    
+
     PLATFORM_WINDOWS = 'Windows'
     PLATFORM_LINUX = 'Linux'
     PLATFORM_MAC = 'Mac OS X'
@@ -24,7 +24,7 @@ class File(models.Model):
         (PLATFORM_LINUX, 'Linux'),
         (PLATFORM_MAC, 'Mac OS X')
     )
-    
+
     date_created = models.DateTimeField(default=datetime.datetime.utcnow)
     date_modified = models.DateTimeField(default=datetime.datetime.utcnow,
                                          auto_now=True)
@@ -33,7 +33,8 @@ class File(models.Model):
     file_name = models.CharField(max_length=200)
     common_name = models.CharField(max_length=200, blank=True, null=True)
     version = models.CharField(max_length=100, blank=True, null=True)
-    platform = models.CharField(max_length=10, choices=PLATFORM_CHOICES, blank=True)
+    platform = models.CharField(max_length=10, choices=PLATFORM_CHOICES,
+                                    blank=True)
     vendor = models.CharField(max_length=200, blank=True, null=True)
     distributors = models.CharField(max_length=200, blank=True, null=True)
     md5_hash = models.CharField(max_length=32, blank=True, null=True)
@@ -47,9 +48,9 @@ class File(models.Model):
 
     def __unicode__(self):
         return self.file_name
-    
+
     class Meta:
-        unique_together = ('file_name', 'md5_hash', 'debug')
+        unique_together = ('file_name', 'debug_filename', 'debug')
 
 
 class Comment(models.Model):
@@ -82,7 +83,8 @@ def compare_history(sender, instance, **kwargs):
 
     existing = File.objects.get(pk=instance.id)
     for key in EVALUATE:
-        if getattr(existing, key) != getattr(instance, key) and any([getattr(existing, key), getattr(instance, key)]):
+        if (getattr(existing, key) != getattr(instance, key) and
+                any([getattr(existing, key), getattr(instance, key)])):
             user = User.objects.get(pk=instance.modified_by_id)
             FileHistory.objects.create(user=user,
                                        dll=existing,

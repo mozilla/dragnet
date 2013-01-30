@@ -2,37 +2,52 @@ import cronjobs
 import csv
 import urllib
 import datetime
+import logging
 from dragnet.dll.models import File
 from django.contrib.auth.models import User
-from django.db import IntegrityError
+
+logger = logging.getLogger("import")
 
 
-            
 class ImproperStatusCode(Exception):
     pass
 
 
 @cronjobs.register
-def updateModuleData():
-    last_report = datetime.date.today() - datetime.timedelta(days=2)
-    reportdatestring = last_report.strftime('%Y%m%d')
-    baseurl = ('https://crash-analysis.mozilla.com/crash_analysis/modulelist/'
-                '%s-modulelist.txt' % reportdatestring)
+def update_module_data():
+    last_report = (datetime.datetime.utcnow() -
+                    datetime.timedelta(days=2)).date()
+    report_date_string = last_report.strftime('%Y%m%d')
+    baseurl = (
+        'https://crash-analysis.mozilla.com/crash_analysis/modulelist/'
+        '%s-modulelist.txt' % report_date_string
+    )
     webpage = urllib.urlopen(baseurl)
     code = webpage.getcode()
     if code != 200:
-        raise ImproperStatusCode('Status code for %s was: %s' % (baseurl, code))
+        raise ImproperStatusCode('Status code for %s was: %s' %
+                                    (baseurl, code))
     datareader = csv.reader(webpage)
 
     # System user is created when the database is created.
-    sysuser = User.objects.get(username='system')
+    sys_user, sys_user_created = User.objects.get_or_create(
+        username='system',
+        first_name='System',
+    )
+
+    if sys_user_created:
+        sys_user.save()
+
     for row in datareader:
         try:
-            File.objects.create(created_by=sysuser, modified_by=sysuser, file_name=row[0], debug_filename=row[1], debug=row[2], version=row[3])
-        except IntegrityError:
-            # When a module is already in the database it cannot be added
-            # again. It will raise an IntegrityError on the unique index,
-            # which is expected behavior. This is a safe exception to ignore.
-            pass
-
+            File.objects.create(
+                created_by=sys_user,
+                modified_by=sys_user,
+                file_name=row[0],
+                debug_filename=row[1],
+                debug=row[2],
+                version=row[3]
+            )
+        except Exception, err:
+            logger.info('Import error: %s', err)
     return 0
