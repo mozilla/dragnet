@@ -5,8 +5,9 @@ import datetime
 import logging
 from dragnet.dll.models import File
 from django.contrib.auth.models import User
+from django.db import IntegrityError
 
-logger = logging.getLogger("import")
+logger = logging.getLogger("cron")
 
 
 class ImproperStatusCode(Exception):
@@ -25,18 +26,15 @@ def update_module_data():
     webpage = urllib.urlopen(baseurl)
     code = webpage.getcode()
     if code != 200:
+        logger.error('Response from %s was %s', baseurl, webpage)
         raise ImproperStatusCode('Status code for %s was: %s' %
                                     (baseurl, code))
     datareader = csv.reader(webpage)
 
-    # System user is created when the database is created.
-    sys_user, sys_user_created = User.objects.get_or_create(
+    sys_user, ___ = User.objects.get_or_create(
         username='system',
         first_name='System',
     )
-
-    if sys_user_created:
-        sys_user.save()
 
     for row in datareader:
         try:
@@ -48,6 +46,6 @@ def update_module_data():
                 debug=row[2],
                 version=row[3]
             )
-        except Exception, err:
-            logger.info('Import error: %s', err)
+        except IntegrityError:
+            logger.info('Integrity error', exc_info=True)
     return 0
