@@ -5,7 +5,6 @@ import datetime
 import logging
 from dragnet.dll.models import File
 from django.contrib.auth.models import User
-from django.db import IntegrityError
 
 logger = logging.getLogger("cron")
 
@@ -38,14 +37,19 @@ def update_module_data():
 
     for row in datareader:
         try:
-            File.objects.create(
-                created_by=sys_user,
-                modified_by=sys_user,
-                file_name=row[0],
-                debug_filename=row[1],
-                debug=row[2],
-                version=row[3]
-            )
-        except IntegrityError:
-            logger.info('Integrity error', exc_info=True)
+            file_ = File.objects.get(file_name=row[0],
+                                     debug_filename=row[1],
+                                     debug=row[2]
+                                     )
+            if not file_:
+                File.objects.create(
+                    created_by=sys_user,
+                    modified_by=sys_user,
+                    file_name=row[0],
+                    debug_filename=row[1],
+                    debug=row[2],
+                    version=row[3]
+                )
+        except Exception:
+            logger.error('Import failed on %s' % row[0], exc_info=True)
     return 0
