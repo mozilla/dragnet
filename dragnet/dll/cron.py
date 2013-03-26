@@ -5,13 +5,18 @@ import datetime
 import logging
 from dragnet.dll.models import File
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
+
+logging.basicConfig()
 logger = logging.getLogger("cron")
 
 
 class ImproperStatusCode(Exception):
     pass
 
+
+#test
 
 @cronjobs.register
 def update_module_data():
@@ -37,11 +42,12 @@ def update_module_data():
 
     for row in datareader:
         try:
-            file_ = File.objects.get(file_name=row[0],
-                                     debug_filename=row[1],
-                                     debug=row[2]
-                                     )
-            if not file_:
+            try:
+                file_ = File.objects.get(file_name=row[0],
+                                         debug_filename=row[1],
+                                         debug=row[2]
+                                         )
+            except ObjectDoesNotExist:            
                 File.objects.create(
                     created_by=sys_user,
                     modified_by=sys_user,
