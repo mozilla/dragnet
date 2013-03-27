@@ -41,6 +41,14 @@ def update_module_data():
     )
 
     for row in datareader:
+        # We want to make the cronjob robust and not fail if we run into a
+        # database error here, so we'll have a generic try-catch block that
+        # captures all unexpected errors and logs them.
+        #
+        # Otherwise, an exception would cause the job to fail, and it would
+        # have to be rerun manually.
+        #
+        # We will catch and handle all known exception types explicitly.
         try:
             try:
                 file_ = File.objects.get(file_name=row[0],
