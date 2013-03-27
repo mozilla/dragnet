@@ -5,13 +5,18 @@ import datetime
 import logging
 from dragnet.dll.models import File
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
+
+logging.basicConfig()
 logger = logging.getLogger("cron")
 
 
 class ImproperStatusCode(Exception):
     pass
 
+
+#test
 
 @cronjobs.register
 def update_module_data():
@@ -36,12 +41,21 @@ def update_module_data():
     )
 
     for row in datareader:
+        # We want to make the cronjob robust and not fail if we run into a
+        # database error here, so we'll have a generic try-catch block that
+        # captures all unexpected errors and logs them.
+        #
+        # Otherwise, an exception would cause the job to fail, and it would
+        # have to be rerun manually.
+        #
+        # We will catch and handle all known exception types explicitly.
         try:
-            file_ = File.objects.get(file_name=row[0],
-                                     debug_filename=row[1],
-                                     debug=row[2]
-                                     )
-            if not file_:
+            try:
+                file_ = File.objects.get(file_name=row[0],
+                                         debug_filename=row[1],
+                                         debug=row[2]
+                                         )
+            except ObjectDoesNotExist:            
                 File.objects.create(
                     created_by=sys_user,
                     modified_by=sys_user,
