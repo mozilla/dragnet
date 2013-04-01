@@ -39,7 +39,9 @@ def update_module_data():
         username='system',
         first_name='System',
     )
-
+    
+    logger.info('Now starting import...')
+    
     for row in datareader:
         # We want to make the cronjob robust and not fail if we run into a
         # database error here, so we'll have a generic try-catch block that
@@ -66,4 +68,6 @@ def update_module_data():
                 )
         except Exception:
             logger.error('Import failed on %s' % row[0], exc_info=True)
+    
+    logger.info('Import is complete')
     return 0
