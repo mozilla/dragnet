@@ -2,6 +2,7 @@ import collections
 
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 
 from django.views.decorators.csrf import csrf_exempt
 import jingo
@@ -61,6 +62,7 @@ def view(request, pk):
 
 
 @login_required
+@transaction.commit_on_success
 def create(request):
     """Main view."""
     if request.method == 'POST':
@@ -76,6 +78,7 @@ def create(request):
     return jingo.render(request, 'dll/create.html', data)
 
 
+@transaction.commit_on_success
 def edit(request, pk):
     if not request.user.is_authenticated():
         return redirect('dll.view', pk)
