@@ -5,6 +5,10 @@ from funfactory.settings_base import *
 from django_sha2 import get_password_hashers
 PASSWORD_HASHERS = get_password_hashers(BASE_PASSWORD_HASHERS, HMAC_KEYS)
 
+MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
+MIDDLEWARE_CLASSES.remove('funfactory.middleware.LocaleURLMiddleware')
+MIDDLEWARE_CLASSES = tuple(MIDDLEWARE_CLASSES)
+
 INSTALLED_APPS = get_apps(append=(
     'dragnet.users',
     'dragnet.dll',
