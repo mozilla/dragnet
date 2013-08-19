@@ -1,5 +1,4 @@
 import jingo
-import jinja2
 import forms
 from babel.dates import format_date, format_datetime
 
