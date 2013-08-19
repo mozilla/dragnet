@@ -1,12 +1,9 @@
 import collections
-from time import mktime
 
-from django import http
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from django.views.decorators.csrf import csrf_exempt
-import bleach
 import jingo
 
 from dragnet.dll.forms import FileForm, CommentForm, SearchForm
@@ -40,10 +37,12 @@ def search(request):
     search = SearchForm(data=request.GET)
     if search.is_valid():
         term = search.cleaned_data['term']
-        results = File.objects.filter(Q(file_name__icontains=term) |
-                                   Q(common_name__icontains=term) |
-                                   Q(vendor__icontains=term) |
-                                   Q(distributors__icontains=term))
+        results = File.objects.filter(
+            Q(file_name__icontains=term) |
+            Q(common_name__icontains=term) |
+            Q(vendor__icontains=term) |
+            Q(distributors__icontains=term)
+        )
     else:
         term = ''
         results = []
@@ -96,9 +95,10 @@ def edit(request, pk):
         elif 'update_comment' in request.POST:
             comment_form = CommentForm(request.POST)
             if comment_form.is_valid():
+                thecomment = comment_form.cleaned_data['comment']
                 Comment.objects.create(user=request.user,
                                        dll=thefile,
-                                       comment=comment_form.cleaned_data['comment'])
+                                       comment=thecomment)
                 return redirect('dll.edit', thefile.pk)
     data = {'dllname': pk, 'form': form, 'comment_form': comment_form,
             'comments': comments, 'history': history}
