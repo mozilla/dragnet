@@ -10,10 +10,14 @@ class File(models.Model):
     STATUS_UNKNOWN = 'unknown'
     STATUS_VALID = 'valid'
     STATUS_MALWARE = 'malware'
+    STATUS_LIKELY_VALID = 'likely_valid'
+    STATUS_LIKELY_MALWARE = 'likely_malware'
     STATUS_CHOICES = (
-        (STATUS_UNKNOWN, 'Unknown'),
-        (STATUS_VALID,     'Valid'),
-        (STATUS_MALWARE, 'Malware')
+        (STATUS_UNKNOWN,        'Unknown'),
+        (STATUS_VALID,          'Valid'),
+        (STATUS_LIKELY_VALID,   'Likely Valid'),
+        (STATUS_LIKELY_MALWARE, 'Likely Malware'),
+        (STATUS_MALWARE,        'Malware'),
     )
 
     PLATFORM_WINDOWS = 'Windows'
